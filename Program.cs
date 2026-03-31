@@ -1,4 +1,9 @@
 
+using Cat_API_Project.Data;
+using Microsoft.EntityFrameworkCore;
+using Scalar;
+using Scalar.AspNetCore;
+
 namespace Cat_API_Project
 {
     public class Program
@@ -19,12 +24,16 @@ namespace Cat_API_Project
                 client.DefaultRequestHeaders.Add("x-api-key", builder.Configuration["TheCatApi:ApiKey"]!);
             });
 
+            builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.MapScalarApiReference();
             }
 
             app.UseHttpsRedirection();
