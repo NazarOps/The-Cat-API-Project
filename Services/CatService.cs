@@ -73,7 +73,7 @@ namespace Cat_API_Project.Services
             await _context.SaveChangesAsync();
 
             var createdCat = await _context.Cats
-                .Include(c => c.BreedId)
+                .Include(c => c.Breed)
                 .FirstOrDefaultAsync(c => c.Id == cat.Id);
 
             if(createdCat == null)
