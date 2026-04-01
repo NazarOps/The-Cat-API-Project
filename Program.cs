@@ -1,6 +1,8 @@
 
 using Cat_API_Project.Data;
+using Cat_API_Project.DTO.External;
 using Cat_API_Project.Services;
+using Cat_API_Project.Services.External;
 using Cat_API_Project.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Scalar;
@@ -30,6 +32,9 @@ namespace Cat_API_Project
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<ICatService, CatService>();
+            builder.Services.AddScoped<ITheCatApiService, TheCatApiService>();
+
+            builder.Services.AddScoped<IBreedImportService, BreedImportService>();
 
             var app = builder.Build();
 
