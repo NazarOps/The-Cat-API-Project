@@ -1,5 +1,7 @@
 
 using Cat_API_Project.Data;
+using Cat_API_Project.Services;
+using Cat_API_Project.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Scalar;
 using Scalar.AspNetCore;
@@ -26,6 +28,8 @@ namespace Cat_API_Project
 
             builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<ICatService, CatService>();
 
             var app = builder.Build();
 
