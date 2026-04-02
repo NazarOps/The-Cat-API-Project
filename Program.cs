@@ -6,9 +6,11 @@ using Cat_API_Project.Services.External;
 using Cat_API_Project.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Scalar;
+using AutoMapper;
 using FluentValidation;
 using Scalar.AspNetCore;
 using Cat_API_Project.Validators;
+using Cat_API_Project.Profiles;
 
 namespace Cat_API_Project
 {
@@ -39,6 +41,8 @@ namespace Cat_API_Project
 
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCatDTOValidator>();
             builder.Services.AddScoped<ISeedService, SeedService>();
+
+            builder.Services.AddAutoMapper(cfg => { }, typeof(CatProfile).Assembly);
 
             var app = builder.Build();
 
