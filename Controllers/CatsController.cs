@@ -3,6 +3,7 @@ using Cat_API_Project.Services.Interfaces;
 using Cat_API_Project.Models;
 using Cat_API_Project.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
 
 namespace Cat_API_Project.Controllers
 {
@@ -38,8 +39,19 @@ namespace Cat_API_Project.Controllers
         }
 
         [HttpPost("/create-a-cat")] 
-        public async Task<IActionResult> Create(CreateCatDTO createCatDto)
+        public async Task<IActionResult> Create(CreateCatDTO createCatDto, IValidator<CreateCatDTO> validator)
         {
+            var validationResult = await validator.ValidateAsync(createCatDto);
+
+            if(!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.Select(e => new
+                {
+                    field = e.PropertyName,
+                    message = e.ErrorMessage
+                }));
+            }
+
             var createdCat = await _catService.CreateCatAsync(createCatDto);
 
             if(createdCat == null)
@@ -51,8 +63,19 @@ namespace Cat_API_Project.Controllers
         }
 
         [HttpPut("/update-a-cat")]
-        public async Task<IActionResult> Update(int id, UpdateCatDTO updateCatDTO)
+        public async Task<IActionResult> Update(int id, UpdateCatDTO updateCatDTO, IValidator<UpdateCatDTO> validator)
         {
+            var validationResult = await validator.ValidateAsync(updateCatDTO);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.Select(e => new
+                {
+                    field = e.PropertyName,
+                    message = e.ErrorMessage
+                }));
+            }
+
             var updatedCat = await _catService.UpdateCatAsync(id, updateCatDTO);
 
             if(!updatedCat)

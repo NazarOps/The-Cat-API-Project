@@ -6,7 +6,9 @@ using Cat_API_Project.Services.External;
 using Cat_API_Project.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Scalar;
+using FluentValidation;
 using Scalar.AspNetCore;
+using Cat_API_Project.Validators;
 
 namespace Cat_API_Project
 {
@@ -29,12 +31,13 @@ namespace Cat_API_Project
             });
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<ICatService, CatService>();
             builder.Services.AddScoped<ITheCatApiService, TheCatApiService>();
-
             builder.Services.AddScoped<IBreedImportService, BreedImportService>();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateCatDTOValidator>();
 
             var app = builder.Build();
 
