@@ -27,12 +27,6 @@ namespace Cat_API_Project.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var breed = await _breedService.GetByIdAsync(id);
-
-            if(breed == null)
-            {
-                return NotFound(new { message = $"Breed with id {id} was not found." });
-            }
-
             return Ok(breed);
         }
 

@@ -11,6 +11,7 @@ using FluentValidation;
 using Scalar.AspNetCore;
 using Cat_API_Project.Validators;
 using Cat_API_Project.Profiles;
+using Cat_API_Project.Middleware;
 
 namespace Cat_API_Project
 {
@@ -47,6 +48,8 @@ namespace Cat_API_Project
 
             var app = builder.Build();
 
+            
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -58,6 +61,7 @@ namespace Cat_API_Project
 
             app.UseAuthorization();
 
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.MapControllers();
 

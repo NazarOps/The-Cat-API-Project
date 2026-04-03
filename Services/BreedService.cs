@@ -4,6 +4,7 @@ using Cat_API_Project.DTO;
 using Cat_API_Project.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Cat_API_Project.Models;
+using Cat_API_Project.Exceptions;
 
 namespace Cat_API_Project.Services
 {
@@ -30,7 +31,7 @@ namespace Cat_API_Project.Services
 
             if(breed == null)
             {
-                return null;
+                throw new NotFoundException($"Breed with id {id} was not found.");
             }
 
             return _mapper.Map<BreedDTO>(breed);
