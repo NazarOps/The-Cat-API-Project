@@ -15,6 +15,7 @@ namespace Cat_API_Project.Profiles
                 opt => opt.MapFrom(src => src.Breed.BreedName));
 
             CreateMap<Breed, BreedDTO>();
+            CreateMap<CreateBreedDTO, Breed>();
         }
     }
 }
