@@ -16,14 +16,14 @@ namespace Cat_API_Project.Controllers
             _breedService = breedService;
         }
 
-        [HttpGet("/api/breeds")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var breeds = await _breedService.GetAllAsync();
             return Ok(breeds);
         }
 
-        [HttpGet("/api/breeds/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var breed = await _breedService.GetByIdAsync(id);
@@ -36,7 +36,7 @@ namespace Cat_API_Project.Controllers
             return Ok(breed);
         }
 
-        [HttpPost("/api/breeds/{id}")]
+        [HttpPost]
         public async Task<IActionResult> Create(CreateBreedDTO createBreedDTO)
         {
             var createdBreed = await _breedService.CreateAsync(createBreedDTO);
@@ -44,7 +44,7 @@ namespace Cat_API_Project.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdBreed.Id }, createdBreed);
         }
 
-        [HttpPut("/api/breeds/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateBreedDTO updateBreedDTO)
         {
             var updated = await _breedService.UpdateAsync(id, updateBreedDTO);
@@ -57,7 +57,7 @@ namespace Cat_API_Project.Controllers
             return NoContent();
         }
 
-        [HttpDelete("api/breeds/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _breedService.DeleteAsync(id);
