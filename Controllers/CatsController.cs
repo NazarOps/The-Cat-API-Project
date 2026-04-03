@@ -18,14 +18,14 @@ namespace Cat_API_Project.Controllers
             _catService = catService;
         }
 
-        [HttpGet("/api/cats")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var cats = await _catService.GetAllCatsAsync();
             return Ok(cats);
         }
 
-        [HttpGet("/api/cats/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var cat = await _catService.GetCatByIdAsync(id);
@@ -38,7 +38,7 @@ namespace Cat_API_Project.Controllers
             return Ok(cat);
         }
 
-        [HttpPost("/api/cats/{id}")] 
+        [HttpPost] 
         public async Task<IActionResult> Create(CreateCatDTO createCatDto, IValidator<CreateCatDTO> validator)
         {
             var validationResult = await validator.ValidateAsync(createCatDto);
@@ -62,7 +62,7 @@ namespace Cat_API_Project.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdCat.Id }, createdCat);
         }
 
-        [HttpPut("/api/cats/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateCatDTO updateCatDTO, IValidator<UpdateCatDTO> validator)
         {
             var validationResult = await validator.ValidateAsync(updateCatDTO);
@@ -86,7 +86,7 @@ namespace Cat_API_Project.Controllers
             return NoContent();
         }
 
-        [HttpDelete("/api/cats/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _catService.DeleteCatAsync(id);
