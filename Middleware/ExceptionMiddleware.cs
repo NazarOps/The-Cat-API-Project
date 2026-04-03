@@ -1,9 +1,11 @@
 ﻿using System.Text.Json;
+using Cat_API_Project.Exceptions;   
 
 namespace Cat_API_Project.Middleware
 {
     public class ExceptionMiddleware
     {
+        // middleware exception handler for global errors, will return the error in JSON format
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionMiddleware> _logger;
 
@@ -24,18 +26,31 @@ namespace Cat_API_Project.Middleware
             {
                 _logger.LogError(ex, "An unhandled exception occurred");
 
-                await HandleExceptionAsync(context);
+                await HandleExceptionAsync(context, ex);
             }
         }
 
-        private static async Task HandleExceptionAsync(HttpContext context)
+        private static async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+            int StatusCode = ex switch
+            {
+                NotFoundException => StatusCodes.Status404NotFound,
+                BadRequestException => StatusCodes.Status400BadRequest,
+                _ => StatusCodes.Status500InternalServerError
+            };
+
+            context.Response.StatusCode = StatusCode;
 
             var response = new
             {
-                message = "An unexpected error occurred."
+                message = ex switch
+                {
+                    NotFoundException => ex.Message,
+                    BadRequestException => ex.Message,
+                    _ => "An unexpected error occurred."
+                }
             };
 
             var json = JsonSerializer.Serialize(response);
