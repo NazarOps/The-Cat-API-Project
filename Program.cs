@@ -38,9 +38,10 @@ namespace Cat_API_Project
             builder.Services.AddScoped<ICatService, CatService>();
             builder.Services.AddScoped<ITheCatApiService, TheCatApiService>();
             builder.Services.AddScoped<IBreedImportService, BreedImportService>();
+            builder.Services.AddScoped<IBreedService, BreedService>();
+            builder.Services.AddScoped<ISeedService, SeedService>();
 
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCatDTOValidator>();
-            builder.Services.AddScoped<ISeedService, SeedService>();
 
             builder.Services.AddAutoMapper(cfg => { }, typeof(CatProfile).Assembly);
 
