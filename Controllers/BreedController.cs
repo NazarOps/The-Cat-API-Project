@@ -1,6 +1,9 @@
 ﻿using Cat_API_Project.DTO;
+using Cat_API_Project.Services;
 using Cat_API_Project.Services.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 namespace Cat_API_Project.Controllers
@@ -10,10 +13,14 @@ namespace Cat_API_Project.Controllers
     public class BreedController : ControllerBase
     {
         private readonly IBreedService _breedService;
+        private readonly IValidator<CreateBreedDTO> _createValidator;
+        private readonly IValidator<UpdateBreedDTO> _updateValidator;
 
-        public BreedController(IBreedService breedService)
+        public BreedController(IBreedService breedService, IValidator<CreateBreedDTO> createValidator, IValidator<UpdateBreedDTO> updateValidator)
         {
             _breedService = breedService;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -31,36 +38,45 @@ namespace Cat_API_Project.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateBreedDTO createBreedDTO)
+        public async Task<IActionResult> Create([FromBody] CreateBreedDTO createBreedDTO)
         {
-            var createdBreed = await _breedService.CreateAsync(createBreedDTO);
+            var validationResult = await _createValidator.ValidateAsync(createBreedDTO);
 
+            if(!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.Select(e => new
+                {
+                    field = e.PropertyName,
+                    message = e.ErrorMessage
+                }));
+            }
+
+            var createdBreed = await _breedService.CreateAsync(createBreedDTO);
             return CreatedAtAction(nameof(GetById), new { id = createdBreed.Id }, createdBreed);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateBreedDTO updateBreedDTO)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateBreedDTO updateBreedDTO)
         {
-            var updated = await _breedService.UpdateAsync(id, updateBreedDTO);
+            var validationResult = await _updateValidator.ValidateAsync(updateBreedDTO);
 
-            if(!updated)
+            if (!validationResult.IsValid)
             {
-                return NotFound(new { message = $"Breed with id {id} was not found" });
+                return BadRequest(validationResult.Errors.Select(e => new
+                {
+                    field = e.PropertyName,
+                    message = e.ErrorMessage
+                }));
             }
 
+            await _breedService.UpdateBreedAsync(id, updateBreedDTO);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _breedService.DeleteAsync(id);
-
-            if(!deleted)
-            {
-                return NotFound(new { message = $"Breed with id {id} was not found" });
-            }
-
+            await _breedService.DeleteBreedAsync(id);
             return NoContent();
         }
     }

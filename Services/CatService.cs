@@ -5,6 +5,7 @@ using Cat_API_Project.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
+using Cat_API_Project.Exceptions;
 
 namespace Cat_API_Project.Services
 {
@@ -41,7 +42,7 @@ namespace Cat_API_Project.Services
             return _mapper.Map<List<CatDTO>>(cats);
         }
 
-        public async Task<CatDTO?> GetCatByIdAsync(int id) // get one cat, if it does not exist return null 404
+        public async Task<CatDTO> GetCatByIdAsync(int id) // get one cat, if it does not exist return null 404
         {
             var cat = await _context.Cats
                 .Include(c => c.Breed)
@@ -49,7 +50,7 @@ namespace Cat_API_Project.Services
 
             if(cat == null)
             {
-                return null;
+                throw new NotFoundException($"Cat with id {id} was not found");
             }
 
             //return new CatDTO
@@ -64,14 +65,14 @@ namespace Cat_API_Project.Services
             return _mapper.Map<CatDTO>(cat);
         }
 
-        public async Task<CatDTO?> CreateCatAsync(CreateCatDTO createCatDTO)
+        public async Task<CatDTO> CreateCatAsync(CreateCatDTO createCatDTO)
         {
             var breedExists = await _context.Breeds
                 .AnyAsync(b => b.Id == createCatDTO.BreedId); // checks if the breed exists that the user is trying to connect to
 
             if(!breedExists) // if breed does not exist, return null and do not create object
             {
-                return null;
+                throw new NotFoundException($"Breed was not found");
             }
 
             //var cat = new Cat // if breed exists, initialize an object
@@ -92,7 +93,7 @@ namespace Cat_API_Project.Services
 
             if(createdCat == null)
             {
-                return null;
+                throw new Exception("Cat could not be created");
             }
 
             //return new CatDTO
@@ -107,20 +108,20 @@ namespace Cat_API_Project.Services
             return _mapper.Map<CatDTO>(createdCat);
         }
 
-        public async Task<bool> UpdateCatAsync(int id, UpdateCatDTO updateCatDTO) // checks if cat and breed exists, if it does then update all the fields
+        public async Task UpdateCatAsync(int id, UpdateCatDTO updateCatDTO) // checks if cat and breed exists, if it does then update all the fields
         {
             var cat = await _context.Cats.FindAsync(id);
 
             if(cat == null)
             {
-                return false;
+                throw new NotFoundException($"Cat with id {id} was not found");
             }
 
             var breedExists = await _context.Breeds.AnyAsync(b => b.Id == updateCatDTO.BreedId);
 
             if(!breedExists)
             {
-                return false;
+                throw new NotFoundException($"Breed with id {id} was not found");
             }
 
             cat.Name = updateCatDTO.Name;
@@ -128,23 +129,19 @@ namespace Cat_API_Project.Services
             cat.BreedId = updateCatDTO.BreedId;
 
             await _context.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteCatAsync(int id) // find cat by id, if it exists delete if its null return false does not exist
+        public async Task DeleteCatAsync(int id) // find cat by id, if it exists delete if its null return false does not exist
         {
             var cat = await _context.Cats.FindAsync(id);
 
             if(cat == null)
             {
-                return false;
+                throw new NotFoundException($"Cat with id {id} was not found");
             }
 
             _context.Cats.Remove(cat);
             await _context.SaveChangesAsync();
-
-            return true;
         }
     }
 }

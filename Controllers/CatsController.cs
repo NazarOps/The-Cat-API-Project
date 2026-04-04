@@ -12,10 +12,14 @@ namespace Cat_API_Project.Controllers
     public class CatsController : ControllerBase
     {
         private readonly ICatService _catService;
+        private readonly IValidator<CreateCatDTO> _createValidator;
+        private readonly IValidator<UpdateCatDTO> _updateValidator;
 
-        public CatsController(ICatService catService)
+        public CatsController(ICatService catService, IValidator<CreateCatDTO> createValidator, IValidator<UpdateCatDTO> updateValidator)
         {
             _catService = catService;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -29,43 +33,13 @@ namespace Cat_API_Project.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var cat = await _catService.GetCatByIdAsync(id);
-
-            if (cat == null)
-            {
-                return NotFound(new { message = $"Cat with id {id} was not found" });
-            }
-
             return Ok(cat);
         }
 
         [HttpPost] 
-        public async Task<IActionResult> Create(CreateCatDTO createCatDto, IValidator<CreateCatDTO> validator)
+        public async Task<IActionResult> Create([FromBody] CreateCatDTO createCatDto)
         {
-            var validationResult = await validator.ValidateAsync(createCatDto);
-
-            if(!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors.Select(e => new
-                {
-                    field = e.PropertyName,
-                    message = e.ErrorMessage
-                }));
-            }
-
-            var createdCat = await _catService.CreateCatAsync(createCatDto);
-
-            if(createdCat == null)
-            {
-                return BadRequest(new { message = "Breed does not exist" });
-            }
-
-            return CreatedAtAction(nameof(GetById), new { id = createdCat.Id }, createdCat);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateCatDTO updateCatDTO, IValidator<UpdateCatDTO> validator)
-        {
-            var validationResult = await validator.ValidateAsync(updateCatDTO);
+            var validationResult = await _createValidator.ValidateAsync(createCatDto);
 
             if (!validationResult.IsValid)
             {
@@ -76,26 +50,32 @@ namespace Cat_API_Project.Controllers
                 }));
             }
 
-            var updatedCat = await _catService.UpdateCatAsync(id, updateCatDTO);
+            var createdCat = await _catService.CreateCatAsync(createCatDto);
+            return CreatedAtAction(nameof(GetById), new { id = createdCat.Id }, createdCat);
+        }
 
-            if(!updatedCat)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateCatDTO updateCatDTO)
+        {
+            var validationResult = await _updateValidator.ValidateAsync(updateCatDTO);
+
+            if(!validationResult.IsValid)
             {
-                return BadRequest(new { message = "Cat or Breed not found" });
+                return BadRequest(validationResult.Errors.Select(e => new
+                {
+                    field = e.PropertyName,
+                    message = e.ErrorMessage
+                }));
             }
 
+            await _catService.UpdateCatAsync(id, updateCatDTO);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _catService.DeleteCatAsync(id);
-
-            if(!deleted)
-            {
-                return NotFound(new { message = $"Cat with id {id} was not found" });
-            }
-
+            await _catService.DeleteCatAsync(id);
             return NoContent();
         }
     }
