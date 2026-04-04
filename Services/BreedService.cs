@@ -25,7 +25,7 @@ namespace Cat_API_Project.Services
             return _mapper.Map<List<BreedDTO>>(breeds);
         }
 
-        public async Task<BreedDTO?> GetByIdAsync(int id)
+        public async Task<BreedDTO> GetByIdAsync(int id)
         {
             var breed = await _context.Breeds.FirstOrDefaultAsync(b => b.Id == id);
 
@@ -47,13 +47,13 @@ namespace Cat_API_Project.Services
             return _mapper.Map<BreedDTO>(breed);
         }
 
-        public async Task<bool> UpdateAsync(int id, UpdateBreedDTO updateBreedDTO)
+        public async Task UpdateBreedAsync(int id, UpdateBreedDTO updateBreedDTO)
         {
             var breed = await _context.Breeds.FindAsync(id);
 
             if(breed == null)
             {
-                return false;
+                throw new NotFoundException($"Breed with id {id} was not found");
             }
 
             breed.BreedName = updateBreedDTO.BreedName;
@@ -62,23 +62,19 @@ namespace Cat_API_Project.Services
             breed.Description = updateBreedDTO.Description;
 
             await _context.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteBreedAsync(int id)
         {
             var breed = await _context.Breeds.FindAsync(id);
 
             if(breed == null)
             {
-                return false;
+                throw new NotFoundException($"Breed with id {id} was not found");
             }
 
             _context.Breeds.Remove(breed);
             await _context.SaveChangesAsync();
-
-            return true;
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Cat_API_Project
 
             builder.Services.AddAutoMapper(cfg => { }, typeof(CatProfile).Assembly);
 
-            var app = builder.Build();
+            var app = builder.Build();  
 
             
 
