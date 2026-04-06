@@ -7,7 +7,7 @@ namespace Cat_API_Project.Services.Interfaces
         Task<List<BreedFactDTO>> GetAllAsync();
         Task<BreedFactDTO> GetByIdAsync(int id);
         Task<BreedFactDTO> CreateAsync(CreateBreedFactDTO createBreedFactDTO);
-        Task UpdateAsync(int id, UpdateBreedFactDTO updateBreedFactDTO);
-        Task DeleteAsync(int id);
+        Task UpdateBreedFactAsync(int id, UpdateBreedFactDTO updateBreedFactDTO);
+        Task DeleteBreedFactAsync(int id);
     }
 }
