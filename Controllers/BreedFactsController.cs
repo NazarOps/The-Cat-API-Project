@@ -67,7 +67,7 @@ namespace Cat_API_Project.Controllers
                 }));
             }
 
-            await _breedFactService.UpdateAsync(id, updateBreedFactDTO);
+            await _breedFactService.UpdateBreedFactAsync(id, updateBreedFactDTO);
 
             return NoContent();
         }
@@ -75,7 +75,7 @@ namespace Cat_API_Project.Controllers
         [HttpDelete("{id}")] 
         public async Task<IActionResult> Delete(int id)
         {
-            await _breedFactService.DeleteAsync(id);
+            await _breedFactService.DeleteBreedFactAsync(id);
             return NoContent();
         }
     }
