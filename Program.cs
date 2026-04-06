@@ -41,6 +41,7 @@ namespace Cat_API_Project
             builder.Services.AddScoped<IBreedImportService, BreedImportService>();
             builder.Services.AddScoped<IBreedService, BreedService>();
             builder.Services.AddScoped<ISeedService, SeedService>();
+            builder.Services.AddScoped<IBreedFactService, IBreedFactService>();
 
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCatDTOValidator>();
 
