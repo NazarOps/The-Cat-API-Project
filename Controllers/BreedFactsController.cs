@@ -22,9 +22,10 @@ namespace Cat_API_Project.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] BreedFactQueryParametersDTO queryParametersDTO)
         {
-            var breedFacts = await _breedFactService.GetAllAsync();
+            // [FromQuery] = get all from URL query
+            var breedFacts = await _breedFactService.GetAllAsync(queryParametersDTO);
             return Ok(breedFacts);
         }
 

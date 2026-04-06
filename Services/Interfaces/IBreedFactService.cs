@@ -4,7 +4,7 @@ namespace Cat_API_Project.Services.Interfaces
 {
     public interface IBreedFactService
     {
-        Task<List<BreedFactDTO>> GetAllAsync();
+        Task<List<BreedFactDTO>> GetAllAsync(BreedFactQueryParametersDTO queryParameters);
         Task<BreedFactDTO> GetByIdAsync(int id);
         Task<BreedFactDTO> CreateAsync(CreateBreedFactDTO createBreedFactDTO);
         Task UpdateBreedFactAsync(int id, UpdateBreedFactDTO updateBreedFactDTO);
