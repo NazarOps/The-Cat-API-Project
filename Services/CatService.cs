@@ -21,7 +21,7 @@ namespace Cat_API_Project.Services
 
         }
 
-        public async Task<List<CatDTO>> GetAllCatsAsync()
+        public async Task<List<CatDTO>> GetAllCatsAsync(CatQueryParametersDTO queryParametersDTO)
         {
             //return await _context.Cats
             //    .Include(c => c.Breed) // include breed that the cat belongs to
@@ -35,11 +35,60 @@ namespace Cat_API_Project.Services
             //    })
             //    .ToListAsync();  
 
-            var cats = await _context.Cats
+            var query = _context.Cats
                 .Include(c => c.Breed)
-                .ToListAsync(); //get all cats first then use automapper
+                .AsQueryable(); // build query before using it to search in database
 
-            return _mapper.Map<List<CatDTO>>(cats);
+            //filtering
+            if (queryParametersDTO.BreedId.HasValue)
+            {
+                query = query.Where(c => c.BreedId == queryParametersDTO.BreedId.Value); // if user sends breed.id then only filter after the breed
+            }
+
+            //sorting
+            if(!string.IsNullOrWhiteSpace(queryParametersDTO.SortBy))
+            {
+                var sortBy = queryParametersDTO.SortBy.ToLower();
+                var sortOrder = queryParametersDTO.SortOrder?.ToLower() == "desc" ? "desc" : "asc";
+
+                query = (sortBy, sortOrder) switch
+                {
+                    ("name", "asc") => query.OrderBy(c => c.Name),
+                    ("name", "desc") => query.OrderByDescending(c => c.Name),
+
+                    ("description", "asc") => query.OrderBy(c => c.Description),
+                    ("description", "desc") => query.OrderByDescending(c => c.Description),
+
+                    ("breedname", "asc") => query.OrderBy(c => c.Breed.BreedName),
+                    ("breedname", "desc") => query.OrderByDescending(c => c.Breed.BreedName),
+
+                    _ => query.OrderBy(c => c.Id)
+                };
+            }
+
+            else
+            {
+                query = query.OrderBy(c => c.Id);
+            }
+
+            //pagination
+            var pageNumber = queryParametersDTO.PageNumber < 1 ? 1 : queryParametersDTO.PageNumber;
+            var pageSize = queryParametersDTO.PageSize < 1 ? 10 : queryParametersDTO.PageSize;
+
+            if(pageSize > 50)
+            {
+                pageSize = 50;
+            }
+
+            query = query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize);
+
+            var cats = await query.ToListAsync();
+
+            //get all cats first then use automapper
+
+            return _mapper.Map<List<CatDTO>>(query);
         }
 
         public async Task<CatDTO> GetCatByIdAsync(int id) // get one cat, if it does not exist return null 404

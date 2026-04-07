@@ -23,9 +23,9 @@ namespace Cat_API_Project.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] CatQueryParametersDTO queryParametersDTO) // read from query string in url
         {
-            var cats = await _catService.GetAllCatsAsync();
+            var cats = await _catService.GetAllCatsAsync(queryParametersDTO);
             return Ok(cats);
         }
 
