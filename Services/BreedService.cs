@@ -19,10 +19,66 @@ namespace Cat_API_Project.Services
             _mapper = mapper;
         }
 
-        public async Task<List<BreedDTO>> GetAllAsync()
+        public async Task<PagedResultDTO<BreedDTO>> GetAllAsync(BreedQueryParametersDTO queryParametersDTO)
         {
-            var breeds = await _context.Breeds.ToListAsync();
-            return _mapper.Map<List<BreedDTO>>(breeds);
+            var query = _context.Breeds.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(queryParametersDTO.Origin))
+            {
+                var origin = queryParametersDTO.Origin.Trim().ToLower();
+                query = query.Where(b => b.Origin.ToLower() == origin);
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryParametersDTO.SortBy))
+            {
+                var sortBy = queryParametersDTO.SortBy.ToLower();
+                var sortOrder = queryParametersDTO.SortOrder?.ToLower() == "desc" ? "desc" : "asc";
+
+                query = (sortBy, sortOrder) switch
+                {
+                    ("breedname", "asc") => query.OrderBy(b => b.BreedName),
+                    ("breedname", "desc") => query.OrderByDescending(b => b.BreedName),
+
+                    ("origin", "asc") => query.OrderBy(o => o.Origin),
+                    ("origin", "desc") => query.OrderByDescending(o => o.Origin),
+
+                    ("lifespan", "asc") => query.OrderBy(b => b.LifeSpan),
+                    ("lifespan", "desc") => query.OrderByDescending(b => b.LifeSpan),
+
+                    _ => query.OrderBy(b => b.Id)
+                };   
+            }
+
+            else
+            {
+                query = query.OrderBy(b => b.Id);
+            }
+
+            //pagination
+            var pageNumber = queryParametersDTO.PageNumber < 1 ? 1 : queryParametersDTO.PageNumber;
+            var pageSize = queryParametersDTO.PageSize < 1 ? 10 : queryParametersDTO.PageSize;
+
+            if(pageSize > 50)
+            {
+                pageSize = 50;
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var breeds = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var breedDTOs = _mapper.Map<List<BreedDTO>>(breeds);
+
+            return new PagedResultDTO<BreedDTO>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                Items = breedDTOs
+            };
         }
 
         public async Task<BreedDTO> GetByIdAsync(int id)

@@ -21,7 +21,7 @@ namespace Cat_API_Project.Services
 
         }
 
-        public async Task<List<CatDTO>> GetAllCatsAsync(CatQueryParametersDTO queryParametersDTO)
+        public async Task<PagedResultDTO<CatDTO>> GetAllCatsAsync(CatQueryParametersDTO queryParametersDTO)
         {
             //return await _context.Cats
             //    .Include(c => c.Breed) // include breed that the cat belongs to
@@ -80,15 +80,24 @@ namespace Cat_API_Project.Services
                 pageSize = 50;
             }
 
-            query = query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize);
+            var totalCount = await query.CountAsync();
 
-            var cats = await query.ToListAsync();
+            var cats = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             //get all cats first then use automapper
 
-            return _mapper.Map<List<CatDTO>>(query);
+            var catDTOs = _mapper.Map<List<CatDTO>>(cats);
+
+            return new PagedResultDTO<CatDTO>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                Items = catDTOs
+            };
         }
 
         public async Task<CatDTO> GetCatByIdAsync(int id) // get one cat, if it does not exist return null 404

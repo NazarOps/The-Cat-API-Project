@@ -24,17 +24,17 @@ namespace Cat_API_Project.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] BreedQueryParametersDTO queryParameters)
         {
-            var breeds = await _breedService.GetAllAsync();
+            var breeds = await _breedService.GetAllAsync(queryParameters);
             return Ok(breeds);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var breed = await _breedService.GetByIdAsync(id);
-            return Ok(breed);
+            var breeds = await _breedService.GetByIdAsync(id);
+            return Ok(breeds);
         }
 
         [HttpPost]

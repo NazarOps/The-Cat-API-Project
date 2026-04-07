@@ -20,7 +20,7 @@ namespace Cat_API_Project.Services
             _mapper = mapper;
         }
 
-        public async Task<List<BreedFactDTO>> GetAllAsync(BreedFactQueryParametersDTO queryParametersDTO)
+        public async Task<PagedResultDTO<BreedFactDTO>> GetAllAsync(BreedFactQueryParametersDTO queryParametersDTO)
         {
             var query = _context.BreedFacts
                 .Include(bf => bf.Breed)
@@ -65,13 +65,22 @@ namespace Cat_API_Project.Services
                 pageSize = 50;
             }
 
-            query = query
-                .Skip((pageNumber - 1) * pageSize) // page 1, size 10
-                .Take(pageSize);
+            var totalCount = await query.CountAsync();
 
-            var breedFacts = await query.ToListAsync();
+            var breedFacts = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
-            return _mapper.Map<List<BreedFactDTO>>(breedFacts);
+            var breedFactDTOs = _mapper.Map<List<BreedFactDTO>>(breedFacts);
+
+            return new PagedResultDTO<BreedFactDTO>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                Items = breedFactDTOs
+            };
         }
 
         public async Task<BreedFactDTO> GetByIdAsync(int id)
