@@ -23,6 +23,17 @@ namespace Cat_API_Project
 
             // Add services to the container.
 
+            builder.Services.AddCors(options =>         //CORS = accept all requests from other origins, headers, http cruds etc
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
@@ -47,9 +58,7 @@ namespace Cat_API_Project
 
             builder.Services.AddAutoMapper(cfg => { }, typeof(CatProfile).Assembly);
 
-            var app = builder.Build();  
-
-            
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -59,6 +68,10 @@ namespace Cat_API_Project
             }
 
             app.UseHttpsRedirection();
+            app.UseRouting();
+
+            app.UseCors("AllowFrontend");
+            //app.UseStaticFiles(); // if using wwwroot
 
             app.UseAuthorization();
 

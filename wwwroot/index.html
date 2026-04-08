@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cat API Frontend</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1>Cat Explorer</h1>
+            <p>Utforska katter, raser och fakta från ditt API</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="controls-card">
+            <div class="controls-row">
+                <div class="form-group">
+                    <label for="breedFilter">Breed Id</label>
+                    <input type="number" id="breedFilter" placeholder="t.ex. 46" />
+                </div>
+
+                <div class="form-group">
+                    <label for="sortBy">Sortera på</label>
+                    <select id="sortBy">
+                        <option value="">Standard</option>
+                        <option value="name">Name</option>
+                        <option value="description">Description</option>
+                        <option value="breedName">BreedName</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sortOrder">Ordning</label>
+                    <select id="sortOrder">
+                        <option value="asc">Asc</option>
+                        <option value="desc">Desc</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="pageSize">Antal per sida</label>
+                    <select id="pageSize">
+                        <option value="4">4</option>
+                        <option value="8" selected>8</option>
+                        <option value="12">12</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button id="loadCatsBtn">Hämta katter</button>
+                <button id="resetBtn" class="secondary-btn">Återställ</button>
+            </div>
+
+            <p id="statusMessage" class="status-message"></p>
+        </section>
+
+        <section class="results-header">
+            <div>
+                <h2>Katter</h2>
+                <p id="resultInfo">Inga resultat ännu</p>
+            </div>
+            <div class="pagination-info">
+                <span id="pageInfo">Sida 1</span>
+            </div>
+        </section>
+
+        <section id="catList" class="cat-grid"></section>
+
+        <section class="pagination-controls">
+            <button id="prevBtn" class="secondary-btn">Föregående</button>
+            <button id="nextBtn" class="secondary-btn">Nästa</button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
