@@ -1,0 +1,69 @@
+﻿body {
+    margin: 0;
+    background-image: url("https://cdn.photoroom.com/v2/image-cache?path=gs://background-7ef44.appspot.com/backgrounds_v3/cats/37_cats.jpg");
+    background-size: 100vw 100vh;
+}
+
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#loginForm {
+    background-color: whitesmoke;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    height: 320px;
+    width: 100%;
+    max-width: 500px;
+    min-height: 300px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.linkContainer {
+    display: flex;
+    margin-top: 10px;
+    gap: 33px;
+
+}
+
+#labelEmail, #labelPass {
+    display: flex;
+    justify-content: flex-start;
+}
+
+label {
+    text-align: left;
+    width: 450px;
+}
+
+#email, #password {
+    display: flex;
+    border-radius: 5px;
+    border-style: none;
+    width: 100%;
+    max-width: 450px;
+    min-height: 30px;
+    margin-bottom: 5px;
+    font-size: 25px;
+}
+
+#submit {
+    display: flex;
+    width: 350px;
+    margin-top: 10px;
+    border-radius: 20px;
+    height: 35px;
+    border-style: none;
+    background: linear-gradient()
+}

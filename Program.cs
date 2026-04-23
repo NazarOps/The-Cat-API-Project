@@ -70,8 +70,8 @@ namespace Cat_API_Project
             app.UseHttpsRedirection();
             app.UseRouting();
 
-            app.UseCors("AllowFrontend");
-            //app.UseStaticFiles(); // if using wwwroot
+            //app.UseCors("AllowFrontend");
+            app.UseStaticFiles(); // if using wwwroot
 
             app.UseAuthorization();
 
