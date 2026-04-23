@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="loginform.css" />
+</head>
+<body>
+    
+    <div class="loginContainer">
+        <h1>Welcome Back</h1>
+        <form action="login.js" id="loginForm">
+            <label for="email" id="labelEmail">Your Email</label>
+            <input type="email" id="email" name="email" />
+            <label for="password" id="labelPass">Your Password</label>
+            <input type="password" id="password" name="password" min="6" max="20">
+            <input type="submit" value="Submit" id="submit" />
+
+            <div class="linkContainer">
+                <a href="">Don't have an account?</a>
+                <a href="">Forgot Password?</a>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>
