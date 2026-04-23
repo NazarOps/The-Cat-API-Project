@@ -3,79 +3,118 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cat API Frontend</title>
+    <title>Catopedia</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <header class="site-header">
-        <div class="container">
-            <h1>Cat Explorer</h1>
-            <p>Utforska katter, raser och fakta från ditt API</p>
+        <div class="container nav">
+            <a href="#" class="logo">Catopedia</a>
+
+            <nav class="nav-links">
+                <a href="#discover">Discover Cats</a>
+                <a href="#facts">Breed Facts</a>
+                <a href="#contact">Contact</a>
+            </nav>
+
+            <a href="login.html" class="login-btn">Login</a>
         </div>
     </header>
 
-    <main class="container">
-        <section class="controls-card">
-            <div class="controls-row">
-                <div class="form-group">
-                    <label for="breedFilter">Breed Id</label>
-                    <input type="number" id="breedFilter" placeholder="t.ex. 46" />
+    <main>
+        <section class="hero" id="hero">
+            <div class="hero-overlay"></div>
+
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <p class="hero-kicker">Welcome to Catopedia</p>
+                    <h1 id="heroTitle">A fun website for cat lovers</h1>
+                    <p class="hero-description">
+                        Explore different breeds, discover fun facts, and create your own cat logbook
+                        with real or imaginary cats.
+                    </p>
+
+                    <div class="hero-meta">
+                        <span class="hero-name" id="heroCatName">Milo</span>
+                        <span class="hero-divider">•</span>
+                        <span class="hero-breed" id="heroBreed">Ragdoll</span>
+                    </div>
+
+                    <p class="hero-fact" id="heroFact">
+                        Ragdolls are known for their calm personality and affectionate nature.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="#discover" class="primary-btn">Explore Cats</a>
+                        <a href="#" class="secondary-btn">Create Your Own</a>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="sortBy">Sortera på</label>
-                    <select id="sortBy">
-                        <option value="">Standard</option>
-                        <option value="name">Name</option>
-                        <option value="description">Description</option>
-                        <option value="breedName">BreedName</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="sortOrder">Ordning</label>
-                    <select id="sortOrder">
-                        <option value="asc">Asc</option>
-                        <option value="desc">Desc</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="pageSize">Antal per sida</label>
-                    <select id="pageSize">
-                        <option value="4">4</option>
-                        <option value="8" selected>8</option>
-                        <option value="12">12</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="button-row">
-                <button id="loadCatsBtn">Hämta katter</button>
-                <button id="resetBtn" class="secondary-btn">Återställ</button>
-            </div>
-
-            <p id="statusMessage" class="status-message"></p>
-        </section>
-
-        <section class="results-header">
-            <div>
-                <h2>Katter</h2>
-                <p id="resultInfo">Inga resultat ännu</p>
-            </div>
-            <div class="pagination-info">
-                <span id="pageInfo">Sida 1</span>
             </div>
         </section>
 
-        <section id="catList" class="cat-grid"></section>
+        <section id="discover" class="features-section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>What you can do</h2>
+                    <p>Catopedia is made to be simple, interactive, and fun.</p>
+                </div>
 
-        <section class="pagination-controls">
-            <button id="prevBtn" class="secondary-btn">Föregående</button>
-            <button id="nextBtn" class="secondary-btn">Nästa</button>
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <div class="feature-image placeholder-box">Preview</div>
+                        <h3>Create your own cats</h3>
+                        <p>
+                            Save custom cats with names, breeds, descriptions, and images in your own cat collection.
+                        </p>
+                    </article>
+
+                    <article id="facts" class="feature-card">
+                        <div class="feature-image placeholder-box">Preview</div>
+                        <h3>Discover breed facts</h3>
+                        <p>
+                            Learn interesting and fun facts about different cat breeds in a clean and easy way.
+                        </p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-image placeholder-box">Preview</div>
+                        <h3>Built with passion</h3>
+                        <p>
+                            Catopedia is a personal project made for people who enjoy cats, creativity, and interactive websites.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="mission-section">
+            <div class="container mission-card">
+                <h2>Our mission</h2>
+                <p>
+                    Our mission is to make Catopedia a fun and interactive place for cat lovers.
+                </p>
+                <p>
+                    Whether you want to keep track of your real cats or create your own imaginary ones,
+                    Catopedia gives you a simple and enjoyable way to explore, learn, and create.
+                </p>
+            </div>
         </section>
     </main>
 
+    <footer id="contact" class="site-footer">
+        <div class="container footer-content">
+            <div>
+                <h3>Catopedia</h3>
+                <p>A playful project for cat lovers.</p>
+            </div>
+
+            <div>
+                <h4>Contact</h4>
+                <p>Email: yourname@example.com</p>
+                <p>GitHub: NazarOps</p>
+            </div>
+        </div>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
