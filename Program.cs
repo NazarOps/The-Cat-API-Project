@@ -34,7 +34,7 @@ namespace Cat_API_Project
             });
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<ICatService, CatService>();
             builder.Services.AddScoped<ITheCatApiService, TheCatApiService>();
