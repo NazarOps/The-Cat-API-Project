@@ -4,7 +4,7 @@
     background-size: 100vw 100vh;
 }
 
-.loginContainer {
+.registerContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,7 +13,7 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#loginForm {
+#registerForm {
     background-color: aliceblue;
     box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
     border-radius: 5px;
@@ -34,7 +34,6 @@
     display: flex;
     margin-top: 10px;
     gap: 33px;
-
 }
 
 #labelEmail, #labelPass {
