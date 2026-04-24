@@ -6,6 +6,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const errorMessage = document.getElementById('errorMessage');
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passRegex = /^(?=.*[!%#&])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
     if (!emailRegex.test(email)) {
         errorMessage.textContent = "Please enter a valid email address.";
@@ -14,6 +15,11 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 
     if (password.length < 8) {
         errorMessage.textContent = "Password must be at least 8 characters.";
+        return;
+    }
+
+    if (!passRegex.test(password)) {
+        errorMessage.textContent = "password must contain a special character"
         return;
     }
 

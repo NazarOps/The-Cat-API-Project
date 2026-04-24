@@ -3,28 +3,25 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-    <link rel="stylesheet" href="loginform.css" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <main>
-        <div class="loginContainer">
-            <h1>Welcome Back</h1>
-            <form action="login.js" id="loginForm" novalidate>
+        <div class="registerContainer">
+            <h1>Create an account</h1>
+            <form action="script.js" id="registerForm" novalidate>
                 <label for="email" id="labelEmail">Your Email</label>
                 <input type="email" id="email" name="email" />
                 <label for="password" id="labelPass">Your Password</label>
                 <input type="password" id="password" name="password" min="6" max="20">
+                <label for="username" id="labelusername">Your username</label>
+                <input type="text" id="username" name="username" min="6" max="20">
+                <label for="dateofbirth" id="labeldateofbirth">Date Of Birth</label>
+                <input type="text" id="us" name="dateofbirth" min="6" max="20">
                 <input type="submit" value="Submit" id="submit" />
-
-                <div class="linkContainer">
-                    <a href="../Register/Register.html">Don't have an account?</a>
-                    <a href="">Forgot Password?</a>
-                </div>
             </form>
             <p id="errorMessage"></p>
         </div>
     </main>
-
-    <script src="login.js"></script>
 </body>
 </html>
