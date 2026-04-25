@@ -7,6 +7,5 @@
         public string Fact { get; set; } = string.Empty;
         public int BreedId { get; set; }
         public Breed Breed { get; set; } = null!;
-        public bool IsUserGenerated { get; set; }
     }
 }

@@ -52,15 +52,9 @@ namespace Cat_API_Project.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("PasswordSalt")
+                    b.Property<string>("PasswordSalt")
                         .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("RefreshToken")
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("RefreshTokenExpiry")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -129,9 +123,6 @@ namespace Cat_API_Project.Migrations
                     b.Property<string>("Fact")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsUserGenerated")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Title")
                         .HasColumnType("text");
