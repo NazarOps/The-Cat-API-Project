@@ -10,6 +10,6 @@
         public string? ImageUrl { get; set; }
         public Breed Breed { get; set; } = null!;
         public Account? Account { get; set; }
-        public string? ImageUrl { get; set; }
+       
     }
 }
