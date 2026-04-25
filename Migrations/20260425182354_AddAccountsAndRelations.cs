@@ -36,6 +36,12 @@ namespace Cat_API_Project.Migrations
                 type: "integer",
                 nullable: true);
 
+            //migrationBuilder.AddColumn<string>(
+            //    name: "ImageUrl",
+            //    table: "Cats",
+            //    type: "text",
+            //    nullable: true);
+
             migrationBuilder.AlterColumn<string>(
                 name: "Title",
                 table: "BreedFacts",
@@ -43,6 +49,13 @@ namespace Cat_API_Project.Migrations
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsUserGenerated",
+                table: "BreedFacts",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.CreateTable(
                 name: "Accounts",
@@ -55,7 +68,9 @@ namespace Cat_API_Project.Migrations
                     Username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
-                    PasswordSalt = table.Column<string>(type: "text", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "bytea", nullable: false),
+                    RefreshToken = table.Column<string>(type: "text", nullable: true),
+                    RefreshTokenExpiry = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
@@ -106,6 +121,14 @@ namespace Cat_API_Project.Migrations
             migrationBuilder.DropColumn(
                 name: "AccountId",
                 table: "Cats");
+
+            //migrationBuilder.DropColumn(
+            //    name: "ImageUrl",
+            //    table: "Cats");
+
+            migrationBuilder.DropColumn(
+                name: "IsUserGenerated",
+                table: "BreedFacts");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",

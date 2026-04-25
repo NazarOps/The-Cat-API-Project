@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cat_API_Project.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260423143942_AddAccountsAndRelations")]
+    [Migration("20260425182354_AddAccountsAndRelations")]
     partial class AddAccountsAndRelations
     {
         /// <inheritdoc />
@@ -55,9 +55,15 @@ namespace Cat_API_Project.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PasswordSalt")
+                    b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("RefreshToken")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("RefreshTokenExpiry")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -126,6 +132,9 @@ namespace Cat_API_Project.Migrations
                     b.Property<string>("Fact")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsUserGenerated")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Title")
                         .HasColumnType("text");
