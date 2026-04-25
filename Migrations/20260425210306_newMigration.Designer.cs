@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cat_API_Project.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260425182354_AddAccountsAndRelations")]
-    partial class AddAccountsAndRelations
+    [Migration("20260425210306_newMigration")]
+    partial class newMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
