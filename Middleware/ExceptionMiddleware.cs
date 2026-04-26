@@ -28,6 +28,8 @@ namespace Cat_API_Project.Middleware
 
                 await HandleExceptionAsync(context, ex);
             }
+
+
         }
 
         private static async Task HandleExceptionAsync(HttpContext context, Exception ex)
@@ -36,9 +38,11 @@ namespace Cat_API_Project.Middleware
 
             int StatusCode = ex switch
             {
+                UnauthorizedException => StatusCodes.Status401Unauthorized,
                 NotFoundException => StatusCodes.Status404NotFound,
                 BadRequestException => StatusCodes.Status400BadRequest,
-                _ => StatusCodes.Status500InternalServerError
+                _ => StatusCodes.Status500InternalServerError,
+                
             };
 
             context.Response.StatusCode = StatusCode;
@@ -47,6 +51,7 @@ namespace Cat_API_Project.Middleware
             {
                 message = ex switch
                 {
+                    UnauthorizedException => ex.Message,
                     NotFoundException => ex.Message,
                     BadRequestException => ex.Message,
                     _ => "An unexpected error occurred."

@@ -1,6 +1,8 @@
 ﻿using Cat_API_Project.Data;
 using Cat_API_Project.DTO;
-using Cat_API_Project.DTO.Auth;
+using Cat_API_Project.DTO.Account.Auth;
+using Cat_API_Project.DTO.Account.Login;
+using Cat_API_Project.Exceptions;
 using Cat_API_Project.Models;
 using Cat_API_Project.Services.Interfaces.IAuth;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +66,35 @@ namespace Cat_API_Project.Services
             };
         }
 
+        public async Task<LoginResponseDTO> LoginAsync(LoginAccountDTO loginAccountDTO)
+        {
+            var account = await _context.Accounts
+                .FirstOrDefaultAsync(a => a.Email == loginAccountDTO.Email);
+
+            if(account == null)
+            {
+                throw new UnauthorizedException("Invalid email or password.");
+            }
+
+            var isPasswordValid = VerifyPasswordHash(
+                loginAccountDTO.Password,
+                account.PasswordHash,
+                account.PasswordSalt
+            );
+
+            if (!isPasswordValid)
+            {
+                throw new Exception("Invalid email or password.");
+            }
+
+            return new LoginResponseDTO
+            {
+                Token = "fake-jwt-token-for-now",
+                Username = account.Username,
+                Email = account.Email
+            };
+        }
+
         private static void CreatePasswordHash(string password, out string passwordHash, out byte[] passwordSalt)
         {
             //here is where the password gets hashed = password + salt = hash
@@ -74,6 +105,16 @@ namespace Cat_API_Project.Services
             var hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
             passwordHash = Convert.ToBase64String(hashBytes);
+        }
+
+        private static bool VerifyPasswordHash(string password, string storedHash, byte[] storedSalt)
+        {
+            using var hmac = new HMACSHA512(storedSalt);
+
+            var computedHashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            var computedHash = Convert.ToBase64String(computedHashBytes);
+
+            return computedHash == storedHash;
         }
     }
 }

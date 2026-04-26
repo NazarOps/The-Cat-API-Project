@@ -1,4 +1,5 @@
 ﻿using Cat_API_Project.DTO;
+using Cat_API_Project.DTO.Account.Login;
 using Cat_API_Project.Services.Interfaces.IAuth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,14 @@ namespace Cat_API_Project.Controllers
                 new { id = account.AccountId },
                 account
                 );
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginAccountDTO loginAccountDTO)
+        {
+            var response = await _authService.LoginAsync(loginAccountDTO);
+
+            return Ok(response);
         }
     }
 }
