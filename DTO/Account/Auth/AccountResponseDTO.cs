@@ -1,4 +1,4 @@
-﻿namespace Cat_API_Project.DTO.Auth
+﻿namespace Cat_API_Project.DTO.Account.Auth
 {
     public class AccountResponseDTO
     {
