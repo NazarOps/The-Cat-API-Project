@@ -12,6 +12,7 @@ using Scalar.AspNetCore;
 using Cat_API_Project.Validators;
 using Cat_API_Project.Profiles;
 using Cat_API_Project.Middleware;
+using Cat_API_Project.Services.Interfaces.IAuth;
 
 namespace Cat_API_Project
 {
@@ -53,6 +54,7 @@ namespace Cat_API_Project
             builder.Services.AddScoped<IBreedService, BreedService>();
             builder.Services.AddScoped<ISeedService, SeedService>();
             builder.Services.AddScoped<IBreedFactService, BreedFactService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCatDTOValidator>();
 
