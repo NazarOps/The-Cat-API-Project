@@ -3,25 +3,38 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="registerform.css" />
 </head>
 <body>
     <main>
         <div class="registerContainer">
             <h1>Create an account</h1>
-            <form action="script.js" id="registerForm" novalidate>
+            <form action="register.js" id="registerForm" novalidate>
+
+                <label for="firstname" id="labelFirstname">Your firstname</label>
+                <input type="text" id="firstName" name="firstName" />
+
+                <label for="lastname" id="labelLastname">Your lastname</label>
+                <input type="text" id="lastName" name="lastName" />
+
                 <label for="email" id="labelEmail">Your Email</label>
                 <input type="email" id="email" name="email" />
+
                 <label for="password" id="labelPass">Your Password</label>
                 <input type="password" id="password" name="password" min="6" max="20">
-                <label for="username" id="labelusername">Your username</label>
+
+                <label for="username" id="labelUsername">Your username</label>
                 <input type="text" id="username" name="username" min="6" max="20">
-                <label for="dateofbirth" id="labeldateofbirth">Date Of Birth</label>
-                <input type="text" id="us" name="dateofbirth" min="6" max="20">
+
+                <label for="dateofbirth" id="labelDateOfBirth">Date Of Birth</label>
+                <input type="text" id="dateofbirth" name="dateofbirth" min="6" max="20">
+
                 <input type="submit" value="Submit" id="submit" />
             </form>
-            <p id="errorMessage"></p>
+            <p id="Message"></p>
         </div>
     </main>
+
+    <script src="register.js"></script>
 </body>
 </html>
