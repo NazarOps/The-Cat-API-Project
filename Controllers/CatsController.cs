@@ -4,6 +4,7 @@ using Cat_API_Project.Models;
 using Cat_API_Project.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cat_API_Project.Controllers
 {
@@ -36,6 +37,7 @@ namespace Cat_API_Project.Controllers
             return Ok(cat);
         }
 
+        
         [HttpPost] 
         public async Task<IActionResult> Create([FromBody] CreateCatDTO createCatDto)
         {

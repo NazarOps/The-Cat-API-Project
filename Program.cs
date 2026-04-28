@@ -13,6 +13,10 @@ using Cat_API_Project.Validators;
 using Cat_API_Project.Profiles;
 using Cat_API_Project.Middleware;
 using Cat_API_Project.Services.Interfaces.IAuth;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Cat_API_Project.Configuration;
 
 namespace Cat_API_Project
 {
@@ -23,6 +27,7 @@ namespace Cat_API_Project
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddOpenApi();
 
             builder.Services.AddCors(options =>         //CORS = accept all requests from other origins, headers, http cruds etc
             {
@@ -36,9 +41,6 @@ namespace Cat_API_Project
             });
 
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
-
             builder.Services.AddHttpClient("TheCatApi", client =>
             {
                 client.BaseAddress = new Uri(builder.Configuration["TheCatApi:BaseUrl"]!);
@@ -55,10 +57,12 @@ namespace Cat_API_Project
             builder.Services.AddScoped<ISeedService, SeedService>();
             builder.Services.AddScoped<IBreedFactService, BreedFactService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IJwtService, JwtService>();
 
+            builder.Services.AddJwtAuthentication(builder.Configuration);
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCatDTOValidator>();
-
             builder.Services.AddAutoMapper(cfg => { }, typeof(CatProfile).Assembly);
+
 
             var app = builder.Build();
 
@@ -75,13 +79,12 @@ namespace Cat_API_Project
             //app.UseCors("AllowFrontend");
             app.UseStaticFiles(); // if using wwwroot
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.MapControllers();
-
-            
 
             app.Run();
         }

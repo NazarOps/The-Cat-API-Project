@@ -2,6 +2,7 @@
 using Cat_API_Project.DTO.Account.Login;
 using Cat_API_Project.Services.Interfaces.IAuth;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cat_API_Project.Controllers
@@ -27,6 +28,13 @@ namespace Cat_API_Project.Controllers
                 new { id = account.AccountId },
                 account
                 );
+        }
+
+        [Authorize]
+        [HttpGet("GenerateJwtToken")]
+        public IActionResult Test()
+        {
+            return Ok("you are authenticated");
         }
 
         [HttpPost("login")]

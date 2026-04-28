@@ -8,16 +8,19 @@ using Cat_API_Project.Services.Interfaces.IAuth;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using Cat_API_Project.Services.Interfaces;
 
 namespace Cat_API_Project.Services
 {
     public class AuthService : IAuthService
     {
         private readonly AppDbContext _context;
+        private readonly IJwtService _jwtService;
 
-        public AuthService(AppDbContext context)
+        public AuthService(AppDbContext context, IJwtService jwtService)
         {
             _context = context;
+            _jwtService = jwtService;
         }
 
         public async Task<AccountResponseDTO> RegisterAsync(RegisterAccountDTO registerAccountDTO)
@@ -84,12 +87,12 @@ namespace Cat_API_Project.Services
 
             if (!isPasswordValid)
             {
-                throw new Exception("Invalid email or password.");
+                throw new UnauthorizedException("Invalid email or password.");
             }
 
             return new LoginResponseDTO
             {
-                Token = "fake-jwt-token-for-now",
+                Token = _jwtService.GenerateToken(account.AccountId, account.Username, account.Email),
                 Username = account.Username,
                 Email = account.Email
             };
