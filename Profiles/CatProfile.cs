@@ -9,17 +9,17 @@ namespace Cat_API_Project.Profiles
         public CatProfile()
         {
             CreateMap<CreateCatDTO, Cat>();
+            CreateMap<UpdateCatDTO, Cat>();
+
+            CreateMap<CreateUserCatDTO, Cat>();
+            CreateMap<UpdateUserCatDTO, Cat>();
 
             CreateMap<Cat, CatDTO>()    //map from cat to catDTO automatically
                 .ForMember(dest => dest.BreedName,
                 opt => opt.MapFrom(src => src.Breed.BreedName));
 
             CreateMap<Cat, UserCatDTO>();
-            CreateMap<CreateUserCatDTO, Cat>();
-            CreateMap<UpdateUserCatDTO, Cat>();
-
-            CreateMap<Breed, BreedDTO>();
-            CreateMap<CreateBreedDTO, Breed>();
+            
         }
     }
 }

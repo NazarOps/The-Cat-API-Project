@@ -189,17 +189,11 @@ namespace Cat_API_Project.Services
 
         public async Task<List<UserCatDTO>> GetUserCatsAsync(int accountId) //get user's cats after auth successful
         {
-            return await _context.Cats
+            var userCats = await _context.Cats
                 .Where(c => c.AccountId == accountId)
-                .Select(c => new UserCatDTO
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Description = c.Description,
-                    BreedId = c.BreedId,
-                    ImageUrl = c.ImageUrl
-                })
                 .ToListAsync();
+
+            return _mapper.Map<List<UserCatDTO>>(userCats);
         }
 
         public async Task<UserCatDTO> UpdateUserCatAsync(int catId, UpdateUserCatDTO updateUserCatDTO, int accountId) //update user's cat after auth success
@@ -216,8 +210,6 @@ namespace Cat_API_Project.Services
             {
                 throw new UnauthorizedException("You do not own this cat.");
             }
-
-            var cat = _mapper.Map(updateUserCatDTO, userCat);
 
             if(userCat == null)
             {
@@ -253,10 +245,7 @@ namespace Cat_API_Project.Services
                 throw new NotFoundException($"Breed with id {id} was not found");
             }
 
-            cat.Name = updateCatDTO.Name;
-            cat.Description = updateCatDTO.Description;
-            cat.BreedId = updateCatDTO.BreedId;
-
+            _mapper.Map(updateCatDTO, cat);
             await _context.SaveChangesAsync();
         }
 

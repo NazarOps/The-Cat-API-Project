@@ -9,6 +9,7 @@ namespace Cat_API_Project.Profiles
         public BreedFactProfile() 
         {
             CreateMap<CreateBreedFactDTO, BreedFact>();
+            CreateMap<UpdateBreedFactDTO, BreedFact>();
 
             CreateMap<BreedFact, BreedFactDTO>()
             .ForMember(dest => dest.BreedName,

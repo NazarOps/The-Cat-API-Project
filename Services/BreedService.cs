@@ -112,11 +112,7 @@ namespace Cat_API_Project.Services
                 throw new NotFoundException($"Breed with id {id} was not found");
             }
 
-            breed.BreedName = updateBreedDTO.BreedName;
-            breed.Origin = updateBreedDTO.Origin;
-            breed.LifeSpan = updateBreedDTO.LifeSpan;
-            breed.Description = updateBreedDTO.Description;
-
+            _mapper.Map(updateBreedDTO, breed);
             await _context.SaveChangesAsync();
         }
 

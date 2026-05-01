@@ -121,7 +121,7 @@ namespace Cat_API_Project.Services
                 throw new Exception("Breed fact could not be created");
             }
 
-            return _mapper.Map<BreedFactDTO>(breedFact);
+            return _mapper.Map<BreedFactDTO>(createBreedFactDTO);
 
         }
 
@@ -134,10 +134,7 @@ namespace Cat_API_Project.Services
                 throw new NotFoundException($"Breed with id {updateBreedFactDTO.BreedId} was not found.");
             }
 
-            breedFact.Title = updateBreedFactDTO.Title;
-            breedFact.Fact = updateBreedFactDTO.Fact;
-            breedFact.BreedId = updateBreedFactDTO.BreedId;
-
+            _mapper.Map(updateBreedFactDTO, breedFact);
             await _context.SaveChangesAsync();
         }
 
