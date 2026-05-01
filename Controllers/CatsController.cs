@@ -41,6 +41,7 @@ namespace Cat_API_Project.Controllers
             return Ok(cat);
         }
 
+        //endpoint for authorized users with JWT token
         [Authorize]
         [HttpPost("create-a-cat")]
         public async Task<IActionResult> CreateMyCat([FromBody] CreateUserCatDTO createUserCatDTO)
@@ -59,7 +60,26 @@ namespace Cat_API_Project.Controllers
             return CreatedAtAction(nameof(CreateMyCat), new { id = Cat.Id }, Cat);
         }
 
+        [Authorize]
+        [HttpGet("my-cats")]
+        public async Task<IActionResult> GetMyCats()
+        {
+            //checks if user has permission to execute the request, finds account id
+            var accountIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            if(accountIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var accountId = Convert.ToInt32(accountIdClaim);
+
+            var getMyCats = await _catService.GetUserCatsAsync(accountId);
+
+            return Ok(getMyCats);
+
+
+        }
         [HttpPost] 
         public async Task<IActionResult> Create([FromBody] CreateCatDTO createCatDto)
         {

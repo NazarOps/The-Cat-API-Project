@@ -183,6 +183,13 @@ namespace Cat_API_Project.Services
             return cat;
         }
 
+        public async Task<List<Cat>> GetUserCatsAsync(int accountId) //test version
+        {
+            return await _context.Cats
+                .Where(c => c.AccountId == accountId)
+                .ToListAsync();
+        }
+
         public async Task UpdateCatAsync(int id, UpdateCatDTO updateCatDTO) // checks if cat and breed exists, if it does then update all the fields
         {
             var cat = await _context.Cats.FindAsync(id);
