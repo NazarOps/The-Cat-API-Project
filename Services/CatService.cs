@@ -211,16 +211,6 @@ namespace Cat_API_Project.Services
                 throw new UnauthorizedException("You do not own this cat.");
             }
 
-            if(userCat == null)
-            {
-                throw new NotFoundException("Cat was not found.");
-            }
-
-            if(userCat.AccountId != accountId)
-            {
-                throw new UnauthorizedException("You do not own this cat.");
-            }
-
             _mapper.Map(updateUserCatDTO, userCat);
 
             await _context.SaveChangesAsync();
