@@ -166,6 +166,71 @@ namespace Cat_API_Project.Services
             return _mapper.Map<CatDTO>(createdCat);
         }
 
+        public async Task<Cat> CreateUserCatAsync(CreateUserCatDTO dto, int accountId)
+        {
+            var cat = new Cat
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                BreedId = dto.BreedId,
+                ImageUrl = dto.ImageUrl,
+                AccountId = accountId
+            };
+
+            await _context.Cats.AddAsync(cat);
+            await _context.SaveChangesAsync();
+
+            return cat;
+        }
+
+        public async Task<List<UserCatDTO>> GetUserCatsAsync(int accountId) //get user's cats after auth successful
+        {
+            return await _context.Cats
+                .Where(c => c.AccountId == accountId)
+                .Select(c => new UserCatDTO
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Description = c.Description,
+                    BreedId = c.BreedId,
+                    ImageUrl = c.ImageUrl
+                })
+                .ToListAsync();
+        }
+
+        public async Task<UserCatDTO> UpdateUserCatAsync(int catId, UpdateUserCatDTO updateUserCatDTO, int accountId) //update user's cat after auth success
+        {
+            var userCat = await _context.Cats
+                .FirstOrDefaultAsync(c => c.Id == catId);
+
+            if(userCat == null)
+            {
+                throw new NotFoundException("Cat was not found.");
+            }
+
+            if(userCat.AccountId != accountId)
+            {
+                throw new UnauthorizedException("You do not own this cat.");
+            }
+
+            userCat.Name = updateUserCatDTO.Name;
+            userCat.Description = updateUserCatDTO.Description;
+            userCat.BreedId = updateUserCatDTO.BreedId;
+            userCat.ImageUrl = updateUserCatDTO.ImageUrl;
+
+            await _context.SaveChangesAsync();
+
+            return new UserCatDTO
+            {
+                Id = userCat.Id,
+                Name = userCat.Name,
+                Description = userCat.Description,
+                BreedId = userCat.BreedId,
+                ImageUrl = userCat.ImageUrl
+            };
+
+        }
+
         public async Task UpdateCatAsync(int id, UpdateCatDTO updateCatDTO) // checks if cat and breed exists, if it does then update all the fields
         {
             var cat = await _context.Cats.FindAsync(id);
@@ -189,6 +254,24 @@ namespace Cat_API_Project.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteUserCatAsync(int catId, int accountId)
+        {
+            var userCat = await _context.Cats
+                .FirstOrDefaultAsync(c => c.Id == catId);
+
+            if(userCat == null)
+            {
+                throw new NotFoundException("Cat was not found.");
+            }
+
+            if(userCat.AccountId != accountId)
+            {
+                throw new UnauthorizedException("You do not own this cat.");
+            }
+
+            _context.Cats.Remove(userCat);
+            await _context.SaveChangesAsync();
+        }
         public async Task DeleteCatAsync(int id) // find cat by id, if it exists delete if its null return false does not exist
         {
             var cat = await _context.Cats.FindAsync(id);
