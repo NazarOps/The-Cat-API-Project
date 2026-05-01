@@ -80,6 +80,43 @@ namespace Cat_API_Project.Controllers
 
 
         }
+
+        [Authorize]
+        [HttpPut("my-cats/{id}")]
+        public async Task<IActionResult> UpdateMyCat(int id, [FromBody] UpdateUserCatDTO updateUserCatDTO)
+        {
+            var accountIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if(accountIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var accountId = Convert.ToInt32(accountIdClaim);
+
+            var updatedUserCat = await _catService.UpdateUserCatAsync(id, updateUserCatDTO, accountId);
+
+            return Ok(updatedUserCat);
+        }
+
+        [Authorize]
+        [HttpDelete("my-cats/{id}")]
+        public async Task<IActionResult> DeleteMyCat(int id)
+        {
+            var accountIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if(accountIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var accountId = Convert.ToInt32(accountIdClaim);
+
+            await _catService.DeleteUserCatAsync(id, accountId);
+
+            return NoContent();
+        }
+
         [HttpPost] 
         public async Task<IActionResult> Create([FromBody] CreateCatDTO createCatDto)
         {

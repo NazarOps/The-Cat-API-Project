@@ -11,6 +11,9 @@ namespace Cat_API_Project.Services.Interfaces
         Task<CatDTO> CreateCatAsync(CreateCatDTO createCatDTO); //create and return the created cat
         Task UpdateCatAsync(int id, UpdateCatDTO updateCatDTO); // return true if the update succeeded else false
         Task DeleteCatAsync(int id);  // return true if deletion succeeded else return false
-        Task<List<Cat>> GetUserCatsAsync(int accountId);
+        Task<List<UserCatDTO>> GetUserCatsAsync(int accountId); // get used cats after being authenticated with JWT
+        Task<UserCatDTO> UpdateUserCatAsync(int catId, UpdateUserCatDTO updateUserCatDTO, int accountId);
+        Task DeleteUserCatAsync(int catId, int accountId);
+
     }
 }
