@@ -166,6 +166,23 @@ namespace Cat_API_Project.Services
             return _mapper.Map<CatDTO>(createdCat);
         }
 
+        public async Task<Cat> CreateUserCatAsync(CreateUserCatDTO dto, int accountId)
+        {
+            var cat = new Cat
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                BreedId = dto.BreedId,
+                ImageUrl = dto.ImageUrl,
+                AccountId = accountId
+            };
+
+            await _context.Cats.AddAsync(cat);
+            await _context.SaveChangesAsync();
+
+            return cat;
+        }
+
         public async Task UpdateCatAsync(int id, UpdateCatDTO updateCatDTO) // checks if cat and breed exists, if it does then update all the fields
         {
             var cat = await _context.Cats.FindAsync(id);
