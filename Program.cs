@@ -17,6 +17,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Cat_API_Project.Configuration;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace Cat_API_Project
 {
@@ -60,6 +61,8 @@ namespace Cat_API_Project
             builder.Services.AddScoped<IJwtService, JwtService>();
 
             builder.Services.AddJwtAuthentication(builder.Configuration);
+            builder.Services.AddValidatorsFromAssemblyContaining<RegisterAccountDTOValidator>();
+            builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCatDTOValidator>();
             builder.Services.AddAutoMapper(cfg => { }, typeof(CatProfile).Assembly);
 
