@@ -166,17 +166,21 @@ namespace Cat_API_Project.Services
             return _mapper.Map<CatDTO>(createdCat);
         }
 
-        public async Task<Cat> CreateUserCatAsync(CreateUserCatDTO dto, int accountId)
+        public async Task<Cat> CreateUserCatAsync(CreateUserCatDTO createUserCatDTO, int accountId)
         {
-            var cat = new Cat
-            {
-                Name = dto.Name,
-                Description = dto.Description,
-                BreedId = dto.BreedId,
-                ImageUrl = dto.ImageUrl,
-                AccountId = accountId
-            };
+            //var cat = new Cat
+            //{
+            //    Name = dto.Name,
+            //    Description = dto.Description,
+            //    BreedId = dto.BreedId,
+            //    ImageUrl = dto.ImageUrl,
+            //    AccountId = accountId
+            //};
 
+            var cat = _mapper.Map<Cat>(createUserCatDTO);
+
+            cat.AccountId = accountId;
+            
             await _context.Cats.AddAsync(cat);
             await _context.SaveChangesAsync();
 
@@ -213,21 +217,23 @@ namespace Cat_API_Project.Services
                 throw new UnauthorizedException("You do not own this cat.");
             }
 
-            userCat.Name = updateUserCatDTO.Name;
-            userCat.Description = updateUserCatDTO.Description;
-            userCat.BreedId = updateUserCatDTO.BreedId;
-            userCat.ImageUrl = updateUserCatDTO.ImageUrl;
+            var cat = _mapper.Map(updateUserCatDTO, userCat);
+
+            if(userCat == null)
+            {
+                throw new NotFoundException("Cat was not found.");
+            }
+
+            if(userCat.AccountId != accountId)
+            {
+                throw new UnauthorizedException("You do not own this cat.");
+            }
+
+            _mapper.Map(updateUserCatDTO, userCat);
 
             await _context.SaveChangesAsync();
 
-            return new UserCatDTO
-            {
-                Id = userCat.Id,
-                Name = userCat.Name,
-                Description = userCat.Description,
-                BreedId = userCat.BreedId,
-                ImageUrl = userCat.ImageUrl
-            };
+            return _mapper.Map<UserCatDTO>(userCat);
 
         }
 

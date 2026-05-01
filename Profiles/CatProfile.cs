@@ -14,6 +14,10 @@ namespace Cat_API_Project.Profiles
                 .ForMember(dest => dest.BreedName,
                 opt => opt.MapFrom(src => src.Breed.BreedName));
 
+            CreateMap<Cat, UserCatDTO>();
+            CreateMap<CreateUserCatDTO, Cat>();
+            CreateMap<UpdateUserCatDTO, Cat>();
+
             CreateMap<Breed, BreedDTO>();
             CreateMap<CreateBreedDTO, Breed>();
         }
