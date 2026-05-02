@@ -12,8 +12,8 @@ namespace Cat_API_Project.Validators
                 .MaximumLength(30);
 
             RuleFor(x => x.LastName)
-            .NotEmpty()
-            .MaximumLength(100);
+                .NotEmpty()
+                .MaximumLength(100);
 
             RuleFor(x => x.Username)
                 .NotEmpty()
